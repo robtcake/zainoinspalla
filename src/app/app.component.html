@@ -1,0 +1,67 @@
+	<!-- elimino l'opacità dell'immagine -->
+	<style>
+		.page-title.has-bg .bg-cover:before {
+			background-color:transparent !important
+		}
+	</style>
+	
+	<!-- begin #header -->
+	<div id="header" class="header navbar navbar-default navbar-expand-lg navbar-fixed-top">
+		<!-- begin container -->
+		<div class="container">
+			<!--begin navbar-brand
+			<a href="index.html" class="navbar-brand">
+				<span class="brand-logo"></span> 
+				<span class="brand-text">
+					Partiamo?
+				</span>
+			</a> -->
+			<div id="google_translate_element"></div>
+
+			
+		<!--	 end navbar-brand -->
+			<!-- begin navbar-toggle -->
+			<button type="button" class="navbar-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#header-navbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<!-- end navbar-toggle -->
+			<!-- begin navbar-collapse -->
+			<div class="collapse navbar-collapse" id="header-navbar">
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a href="#">HOME </a>
+					</li>
+          		<li>
+					  <a routerLink="/lista-viaggi" routerLinkActive="active">VIAGGI</a></li>
+				</ul>
+			</div>
+			<!-- end navbar-collapse -->
+			
+		</div>
+		<!-- end container -->
+	</div>
+	<!-- end #header -->
+
+  	<!-- begin #page-title -->
+	<div id="page-title" class="page-title has-bg">
+		<div class="bg-cover" data-paroller="true" data-paroller-factor="0.5" data-paroller-factor-xs="0.2" style="background: url(../assets/img/bg/bg-action.jpg) center 0px / cover no-repeat"></div>
+		<div class="container">
+		 
+			<p> 
+				Questo sito nasce per organizzare e condividere con facilità i viaggi che ho in mente.
+			</p>
+			<p>	
+				L'idea finale è quella di fornire una piattaforma per tutti quelli che amano pianificare un viaggio e condividerlo.
+			</p>
+			<p>
+				Sono ancora all'inizio, spero di avere dei feedback costruttivi e tanti compagni di viaggio!
+			</p>
+		</div> 
+	</div>
+	<!-- end #page-title -->
+
+<div id="content" class="content">
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,358 @@
+<div class="container">
+    <!-- BEGIN page-header -->
+    <h1 class="page-header widget-list rounded mb-4">
+        <div class="widget-list-item">
+            <div class="widget-list-media">
+                <div class="bandiera" *ngFor="let b of viaggioRef?.bandiere; let i = index"
+                    [ngStyle]="{'margin-left': (i*40) + 'px'}">
+                    <img src="../assets/img/{{b}}" height="50%" />
+                </div>
+            </div>
+            <div class="widget-list-content">
+                {{viaggioRef?.titolo}}
+                <small>{{viaggioRef?.descrizione}}</small>
+            </div>
+        </div>
+    </h1>
+    <!-- BEGIN Note di viaggio importanti-->
+    <div *ngFor="let note of listaNote">
+        <div *ngIf="note.priorita == true">
+            <div class="widget widget-stats bg-orange mb-7px">
+                <div class="stats-icon stats-icon-lg"><i class="fa fa-file-alt fa-fw"></i></div>
+                <div class="stats-content">
+                    <div class="stats-title">{{note.titolo}}</div>
+                    <div ><em><h4>{{note.paragrafo}}</h4></em></div>
+                    <div class="stats-desc">
+                        <a class="w-60px" *ngIf="note.link" href="{{note.link}}" target="_blank"
+                            style="color: white !important">
+                            clicca qui
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Note di viaggio importanti-->
+
+    <!-- begin widget-stats -->
+    <div class="widget widget-stats bg-teal mb-10px">
+        <div class="stats-icon stats-icon-lg"><i class="fa fa-globe fa-fw"></i></div>
+
+        <div class="row mb-3">
+            <div class="col-xl-2 ui-sortable">
+                <div class="stats-content ">
+                    <div class="stats-title"><i class="fas fa-home fa-fw"></i> Pernottamenti</div>
+                    <div class="semi-bold">{{viaggioRef?.pernottamenti}}</div>
+                </div>
+            </div>
+            <div class="col-xl-2 ui-sortable">
+                <div class="stats-content ">
+                    <div class="stats-title"><i class="fas fa-bus fa-fw"></i> Trasporti</div>
+                    <div class="semi-bold">{{viaggioRef?.trasporti}}</div>
+                </div>
+            </div>
+            <div class="col-xl-2 ui-sortable">
+                <div class="stats-content ">
+                    <div class="stats-title"> <i class="fas fa-coffee fa-fw"></i> Pasti</div>
+                    <div class="semi-bold">{{viaggioRef?.pasti}}</div>
+                </div>
+            </div>
+            <div class="col-xl-2 ui-sortable">
+                <div class="stats-content ">
+                    <div class="stats-title"> <i class="fas fa-heartbeat fa-fw"></i> Difficoltà</div>
+                    <div class="semi-bold">{{viaggioRef?.difficolta}}</div>
+                </div>
+            </div>
+            <div class="col-xl-2 ui-sortable">
+                <div class="stats-content ">
+                    <div class="stats-title"> <i class="fas fa-id-card fa-fw"></i> Visti e Vaccinazioni</div>
+                    <div class="semi-bold">{{viaggioRef?.vistiVaccini}}
+                        <a class="w-60px" *ngIf="viaggioRef?.linkVistiVaccini" href="{{viaggioRef?.linkVistiVaccini}}"
+                            target="_blank" style="color: white !important">
+                            clicca qui
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 ui-sortable">
+                <div class="stats-content ">
+                    <div class="stats-title"> <i class="fas fa-info-circle fa-fw"></i> Viaggiare Sicuri</div>
+                    <div class="semi-bold">
+                        <a class="w-60px" *ngFor="let vs of listaVS; let i = index" [href]="vs.link" target="_blank"
+                            [ngStyle]="{'margin-left': (i*5) + 'px'}">
+                            <img src="../assets/img/{{vs.bandiera}}" height="30px" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <!-- end widget-stats -->
+
+    <!-- END page-header -->
+    <div class="row mb-3">
+        <div class="col-xl-9 ui-sortable">
+            <!-- BEGIN timeline -->
+            <div class="timeline">
+                <!-- BEGIN timeline-item -->
+                <div class="timeline-item" *ngFor="let it of listaItinerari;">
+                    <!-- BEGIN timeline-time -->
+                    <div class="timeline-time">
+                        <h5>{{it.nome}} </h5>
+                        <hr class="my-10px" />
+                        <h3>{{it.data?.toDate() | date:'dd MMM yyy'}}</h3>
+                        <hr *ngIf="it.notti" class="my-10px" />
+                        <h5 *ngIf="it.notti">Notti: {{it.notti}} </h5>
+                        <hr class="my-10px" *ngIf="it.luogo" /> {{it.luogo}}
+                        <div *ngIf="it.gmap" [innerHtml]="it.gmap"></div>
+                    </div>
+                    <!-- END timeline-time -->
+                    <!-- BEGIN timeline-icon -->
+                    <div class="timeline-icon">
+                        <a href="javascript:;">&nbsp;</a>
+                    </div>
+                    <!-- END timeline-icon -->
+                    <!-- BEGIN timeline-content -->
+                    <div class="timeline-content">
+                        <!-- BEGIN timeline-header -->
+                        <div class="timeline-header">
+                          <p class="lead">{{it.programma}}</p>  
+                        </div>
+                        <!-- END timeline-header -->
+                        <!-- BEGIN timeline-body -->
+                        <div class="timeline-body">
+                            <!-- ALLOGGIO -->
+                            <div class="lead mb-3" *ngIf="it.alloggio.length > 0">
+                                <h4 class="card-title">Alloggi</h4>
+                                <!-- begin widget-list -->
+                                <div class="d-flex" *ngFor="let alloggio of it.alloggio">
+                                    <a class="w-60px" href="{{alloggio.link}}" target="_blank">
+                                        <i *ngIf="!alloggio.link?.includes('booking.com')"
+                                            class="fas fa-home fa-fw"></i>
+                                        <img *ngIf="alloggio.link?.includes('booking.com')"
+                                            src="../assets/img/brand/brand-booking-com.png" alt=""
+                                            class="mw-100 rounded" />
+                                    </a>
+                                    <div class="ps-3 flex-1">
+                                        <h5 class="mb-1">{{alloggio.nome}}</h5>
+                                        <hr class="bg-gray-500" />
+                                        <dl class="row">
+                                            <dt class="col-md-4">tipo camera</dt>
+                                            <dd class="col-md-8">{{alloggio.tipoCamere}}</dd>
+                                            <dt class="col-md-4">numero camere</dt>
+                                            <dd class="col-md-8">{{alloggio.numeroCamere}}</dd>
+                                            <dt class="col-md-4">prezzo/camera</dt>
+                                            <dd class="col-md-8">{{alloggio.prezzoCamera}}</dd>
+                                            <dt class="col-md-4">persone/camera</dt>
+                                            <dd class="col-md-8">{{alloggio.numeroPersone}}</dd>
+                                            <dt class="col-md-4">note</dt>
+                                            <dd class="col-md-8">{{alloggio.note}}</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <hr class="my-10px" />
+                            </div>
+                            <!-- TRASPORTI -->
+                            <div class="lead mb-3" *ngIf="it.trasporti.length > 0">
+                                <h4 class="card-title">Trasporti</h4>
+                                <!-- begin widget-list -->
+                                <div class="d-flex" *ngFor="let trasporto of it.trasporti">
+                                    <div *ngIf="trasporto.link">
+                                        <a class="w-60px" href="{{trasporto.link}}" target="_blank">
+                                            <i class="{{trasporto.icona}}"></i>
+                                        </a>
+                                    </div>
+                                    <div class="ps-3 flex-1">
+                                        <h5 class="mb-1">{{trasporto.compagnia}}</h5>
+                                        <hr class="bg-gray-500" />
+                                        <dl class="row">
+                                            <dt class="col-md-4">partenza</dt>
+                                            <dd class="col-md-8">{{trasporto.partenza}}
+                                                {{trasporto.dataPartenza?.toDate() | date:'dd MMM yyy hh:mm'}}</dd>
+                                            <dt class="col-md-4">arrivo</dt>
+                                            <dd class="col-md-8">{{trasporto.arrivo}} {{trasporto.dataArrivo?.toDate() |
+                                                date:'dd MMM yyy hh:mm'}}</dd>
+                                            <dt class="col-md-4">prezzo/pax</dt>
+                                            <dd class="col-md-8">{{trasporto.prezzoPersona}}</dd>
+                                            <dt class="col-md-4">note</dt>
+                                            <dd class="col-md-8">{{trasporto.note}}</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <hr class="my-10px" />
+                            </div>
+
+                            <!-- ATTIVITA -->
+                            <!-- timeline-post -->
+                            <div class="mb-3" *ngIf="it.attivita.length > 0">
+                                <h4 class="card-title">Attività</h4>
+                                <div class="row gx-1" *ngFor="let attivita of it.attivita">
+                                    <div class="row gx-1">
+                                        <div class="col-6">
+                                            <div class="ratio ratio-4x3">
+                                                <img src="{{attivita.immagine}}" class="d-block mw-100">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="ps-3 flex-1">
+                                                <h5 class="mb-1">{{attivita.nome}}</h5>
+                                                <hr class="bg-gray-500" />
+                                                <dl class="row">
+                                                    <dt class="col-md-4">tipo</dt>
+                                                    <dd class="col-md-8">{{attivita.tipo}}</dd>
+                                                    <dt class="col-md-4">orari</dt>
+                                                    <dd class="col-md-8">{{attivita.orari}}</dd>
+                                                    <dt class="col-md-4">prezzo/pax</dt>
+                                                    <dd class="col-md-8">{{attivita.prezzoPersona}}</dd>
+                                                    <dd class="col-md-4" >
+                                                        <a class="w-60px" href="{{attivita.link}}" target="_blank">
+                                                            <img *ngIf="attivita.link?.includes('tripadvisor')"
+                                                                src="../assets/img/brand/brand-tripadvisor.png" alt=""
+                                                                class="mw-100 rounded" />
+                                                            <img *ngIf="attivita.link?.includes('wikipedia')"
+                                                                src="../assets/img/brand/brand-wikipedia.png" alt=""
+                                                                class="mw-100 rounded" /> 
+                                                            <img *ngIf="attivita.link?.includes('gmaps')"
+                                                                src="../assets/img/brand/brand-gmaps.png" alt=""
+                                                                class="mw-100 rounded" />
+                                                        </a>
+                                                    </dd>
+                                                    <dd class="col-md-8"><div *ngIf="attivita.gmap" [innerHtml]="attivita.gmap"></div></dd>
+                                                    
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div> 
+
+                                    <div  class="row gx-1">
+                                        <div class="col-12">
+                                          <p>
+                                               {{attivita.note}}
+                                          </p> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-2" *ngIf="it.note">
+                                    <hr class="my-10px" />
+                                    <h4 class="card-title">Note</h4> {{it.note}}
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- END timeline-body -->
+                    </div>
+                    <!-- END timeline-content -->
+                </div>
+                <!-- END timeline-item -->
+
+            </div>
+            <!-- END timeline -->
+            <!-- BEGIN Note di viaggio-->
+            <div class="note note-yellow ">
+                <div class="note-content">
+                    <h2> <i class="fa fa-sticky-note"></i> &nbsp;&nbsp; <b>Note di viaggio</b></h2>
+                    <hr class="my-10px" bg-white />
+                    <div *ngFor="let note of listaNote">
+                        <div *ngIf="note.priorita == false">
+                            <h5>{{note.titolo}}</h5>
+                            <p> {{note.paragrafo}} </p>
+                            <div class="stats-desc">
+                                <a class="w-60px" *ngIf="note.link" href="{{note.link}}" target="_blank"
+                                    style="color: darkslategray !important">
+                                    clicca qui
+                                </a>
+                            </div>
+                            <hr class="my-10px" bg-white />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END Note di viaggio -->
+        </div>
+        <div class="col-xl-3 ui-sortable">
+<style>
+
+    :host ::ng-deep .mapEmbed iframe { 
+        width:100%;
+        height:500px;
+        }
+</style>
+            <!-- BEGIN widget-map -->
+            <div class="widget-map rounded mb-4" data-id="widget">
+                <!-- BEGIN widget-map-body -->
+                <div class="widget-map-body" 
+                *ngIf="viaggioRef?.percorsoMapsEmbed" [innerHtml]="viaggioRef?.percorsoMapsEmbed">
+                   
+                    <!-- <iframe class="d-block"
+                        src="https://www.google.com/maps/embed?pb=!1m70!1m12!1m3!1d12578254.533305304!2d71.63962526882331!3d23.751229074037955!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m55!3e0!4m5!1s0x390d047309fff32f%3A0xfc5606ed1b5d46c3!2sDelhi%2C%20India!3m2!1d28.6862738!2d77.2217831!4m5!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan%2C%20India!3m2!1d26.9124336!2d75.7872709!4m5!1s0x39740d857c2f41d9%3A0x784aef38a9523b42!2sAgra%2C%20Uttar%20Pradesh%2C%20India!3m2!1d27.1766701!2d78.00807449999999!4m5!1s0x3976c5d1792291fb%3A0xff4fb56d65bc3adf!2sGwalior%2C%20Madhya%20Pradesh%2C%20India!3m2!1d26.218287099999998!2d78.18283079999999!4m5!1s0x3977785bf0359717%3A0xeab7a0fa33593940!2zw5NyxI1oYSwgTWFkaHlhIFByYWRlc2gsIEluZGlh!3m2!1d25.3682704!2d78.6285252!4m5!1s0x3982e5f63138c3c5%3A0xaa20ea639a4572c!2sKhajuraho%2C%20Madhya%20Pradesh%2C%20India!3m2!1d24.8318452!2d79.91985489999999!4m5!1s0x398e2db76febcf4d%3A0x68131710853ff0b5!2sVaranasi%2C%20Uttar%20Pradesh%2C%20India!3m2!1d25.317645199999998!2d82.9739144!4m5!1s0x3bbfba106336b741%3A0xeaf887ff62f34092!2sGoa%2C%20India!3m2!1d15.2993265!2d74.12399599999999!4m5!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra%2C%20India!3m2!1d19.0759837!2d72.8776559!5e0!3m2!1sit!2sit!4v1629734397487!5m2!1sit!2sit"
+                        width="100%" height="500px" frameborder="0" style="border:0" allowfullscreen=""></iframe>-->
+                </div>
+                <!-- END widget-map-body -->
+            </div>
+            <!-- END widget-map -->
+            <!-- ASSICURAZIONI widget- -->
+            <div class="note note-info">
+                <div class="note-content">
+                    <h2> <i class="fa fa-shield-alt"></i> &nbsp;&nbsp; <b>Assicurazioni</b></h2>
+                    <hr class="my-10px" bg-white />
+                    <div *ngFor="let assicurazione of listaAssicurazioni">
+                        <a class="w-60px" href="{{assicurazione.link}}" target="_blank"
+                            style="color: white !important;">
+                            <h5>{{assicurazione.nome}}</h5>
+                        </a>
+                        <p> {{assicurazione.descrizione}} </p>
+                        <p> prezzo/pax: {{assicurazione.prezzoPersona}} </p>
+                        <hr class="my-10px" bg-white />
+                    </div>
+                </div>
+            </div>
+            <!-- END Assicurazioni -->
+            <!-- BEGIN card -->
+            <div class="card border-0 mb-3 bg-gray-900 text-white">
+                <!-- BEGIN card-body -->
+                <div class="card-body">
+                    <!-- BEGIN title -->
+                    <div class="mb-3 text-gray-300">
+                        <h2> <i class="fa fa-euro-sign"></i> &nbsp;&nbsp; <b>Stima dei costi</b></h2>
+                        <hr class="my-10px" bg-white />
+                    </div>
+                    <!-- END title -->
+                    <!-- BEGIN product -->
+                    <div class="d-flex align-items-center mb-15px" *ngFor="let costi of listaCosti">
+                        <div class="widget-img rounded-3 me-10px  p-3px w-30px">
+                            <i class="fas fa-plane fa-fw" *ngIf="costi.tipo=='aereo'"></i>
+                            <i class="fas fa-car-side fa-fw" *ngIf="costi.tipo=='auto'"></i>
+                            <i class="fas fa-home fa-fw" *ngIf="costi.tipo=='albergo' || costi.tipo=='ostello'"></i>
+                            <i class="fas fa-ticket-alt fa-fw" *ngIf="costi.tipo=='attivita'"></i>
+                            <i  class="fas fa-utensils fa-fw" *ngIf="costi.tipo=='ristorante'"></i>
+                        </div>
+                        <div class="text-truncate">
+                            <div>{{costi.nome}}</div>
+                            <div class="text-gray-300">{{costi.euro}} €</div>
+                        </div>
+                        <div class="ms-auto text-center">
+                            <div class="fs-13px"></div>
+                            <div class="text-gray-500 fs-10px">
+                                <i class="fas fa-child fa-fw" *ngIf="costi.tipo=='aereo' || costi.tipo=='auto' || costi.tipo=='attivita'" title="Numero persone"></i>
+                                <i class="fas fa-bed fa-fw" *ngIf="costi.tipo=='albergo' || costi.tipo=='ostello'" title="Numero camere"></i>
+                                {{costi.numero}}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END product -->
+                    <hr class="my-10px" bg-white />
+                    <b>Totale: {{totaleCosti | number:'1.0-2'}} €</b>
+                </div>
+                <!-- END card-body -->
+            </div>
+            <!-- END card -->
+
+        </div>
+    </div>
+
+
+
+</div>

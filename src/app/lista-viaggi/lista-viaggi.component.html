@@ -1,0 +1,53 @@
+	<style>
+        .bandiera {
+        width:70px; height:70px; position:absolute;  top:0px;
+        }
+    </style>
+    
+
+		<!-- begin container -->
+		<div class="container">
+			<!-- begin post-list -->
+			<div class="post-list post-grid post-grid-3">
+				<div class="post-li" *ngFor="let vgg of listaViaggi;">
+					<!-- begin post-content -->
+					<div class="post-content" style="background-color: white;">
+						<!-- begin post-image -->
+						<div class="post-image">
+							<a routerLink="/dettaglio-viaggio/{{vgg.id}}">
+
+								<div class="post-image-cover" style="background-image: url(../assets/img/{{vgg.vi?.immagine || 'post/world.png'}})">
+                                    <div class="bandiera" *ngFor="let b of vgg.vi?.bandiere; let i = index" [ngStyle]="{'margin-left': (i*40) + 'px'}">
+                                        <img src="../assets/img/{{b}}" height="50%" />
+                                    </div>
+                                </div>
+							</a>
+						</div>
+						<!-- end post-image -->
+						<!-- begin post-info -->
+						<div class="post-info">
+							<h4 class="post-title">
+								<a routerLink="/dettaglio-viaggio/{{vgg.id}}">{{vgg.vi?.titolo}}</a>
+							</h4>
+							<div class="post-by">
+								di <a href="#">Robt</a> <span class="divider">|</span> <span >{{vgg.vi?.dataInizio.toDate() | date:'MMM yyy'}} - {{vgg.vi?.dataFine.toDate() | date:'MMM yyy'}}</span>
+							</div>
+							<div class="post-desc">
+								{{vgg.vi?.descrizione}}
+							</div>
+							<div class="read-btn-container">
+								<a routerLink="/dettaglio-viaggio/{{vgg.id}}">Approfondosci <i class="fa fa-angle-double-right"></i></a>
+							</div>
+						</div>
+						<!-- end post-info -->
+					</div>
+					<!-- end post-content -->
+				</div>
+			</div>
+			<!-- end post-list -->
+			<div class="section-container">
+				<!-- begin pagination -->
+				<!-- end pagination -->
+			</div>
+		</div>
+		<!-- end container -->
