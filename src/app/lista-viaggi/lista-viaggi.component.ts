@@ -28,18 +28,18 @@ this.viaggiService.getListaViaggi2().subscribe(res => {
 //https://stackoverflow.com/questions/46900430/firestore-getting-documents-id-from-collection
   
   });
-  }
+  
 
 //https://www.youtube.com/watch?v=k204K2mJHfk How To Query a Firestore Collection using AngularFire
-      // this.viaggiService.getListaViaggi().valueChanges().subscribe(
-      //   item => {
-      //     this.listaViaggi= [];
-      //     item.forEach(element => {
-      //       this.listaViaggi.push(element as Viaggio);
-      //       console.log(element)
-      //     })
-      //   });
-  }
 
+//solo per stampare il json della lista viaggi: 
+//       this.viaggiService.getListaViaggi().valueChanges().subscribe(
+//         item => {
+//           item.forEach(element => {
+//             console.log(JSON.stringify(element));
+//           })
+//         });
+  }
+}
 // problema undefined grafico
 // https://stackoverflow.com/questions/54884488/how-can-i-solve-the-error-ts2532-object-is-possibly-undefined/58401023#58401023 

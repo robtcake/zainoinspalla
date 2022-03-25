@@ -110,9 +110,11 @@ export class DettaglioViaggioComponent implements OnInit {
               sca.euro = all.totaleEuro;
               this.listaCosti.push(sca);
               it.alloggio.push(all);
+              console.log(JSON.stringify(it));
               this.totaleCosti += ((sca.euro * sca.numero) / all.numeroPersone);
             })
           })
+          
           it.trasporti = [];
           this.viaggiService.getTrasportiSnap(id, element.payload.doc.id).subscribe(resT =>{
             resT.forEach(elementT => {
