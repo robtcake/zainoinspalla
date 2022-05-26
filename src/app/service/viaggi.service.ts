@@ -18,7 +18,7 @@ export class ViaggiService {
 
   getListaViaggi2() { 
     return this.db
-    .collection("viaggi", ref => ref.orderBy('dataInizio')).snapshotChanges();
+    .collection("viaggi", ref => ref.orderBy('dataInizio', 'desc')).snapshotChanges();
   }
 
   getViaggioVChanges(id: string ) {
