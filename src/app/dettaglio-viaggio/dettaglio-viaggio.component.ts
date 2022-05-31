@@ -5,11 +5,12 @@ import { Trasporti } from './../model/trasporti.model';
 import { Alloggio } from './../model/alloggio.model';
 import { Itinerario } from './../model/itinerario.model';
 import { ViaggiService } from './../service/viaggi.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { ViaggiareSicuriFarnesina, Viaggio } from '../model/viaggio.model';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
 import { StimaCosti } from '../model/stimaCosti.model';
+
 
 
 @Component({
@@ -27,6 +28,10 @@ export class DettaglioViaggioComponent implements OnInit {
   listaCosti: StimaCosti[] = [];
   totaleCosti : number = 0;
   listaVS: ViaggiareSicuriFarnesina[] = [];
+  diarioData: any| undefined;
+  diarioAutore : string = "";
+  diarioRacconto : string = "";
+
 
 
 
@@ -110,7 +115,7 @@ export class DettaglioViaggioComponent implements OnInit {
               sca.euro = all.totaleEuro;
               this.listaCosti.push(sca);
               it.alloggio.push(all);
-              console.log(JSON.stringify(it));
+              //console.log(JSON.stringify(it));
               this.totaleCosti += ((sca.euro * sca.numero) / all.numeroPersone);
             })
           })
@@ -154,13 +159,15 @@ export class DettaglioViaggioComponent implements OnInit {
         })
        // this.listaItinerari.sort((a,b) => (a.step > b.step) ? 1 : ((b.step > a.step) ? -1 : 0)) // li ordino nel service in base alla data
 
-    })
-
-
-
-
-
+    });
     
+  }
+
+  toggleDiary(itinerario:Itinerario) {
+    this.diarioData = this.diarioRacconto = this.diarioAutore = "";
+    this.diarioData = itinerario.data;
+    this.diarioAutore = itinerario.diario.autore;
+    this.diarioRacconto = itinerario.diario.racconto.join(' '); 
   }
 
 }

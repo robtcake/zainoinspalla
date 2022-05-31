@@ -1,6 +1,7 @@
 import { Trasporti } from './trasporti.model';
 import { Attivita } from './attivita.model';
 import { Alloggio } from './alloggio.model';
+import { Diario } from './diario.model';
 export class Itinerario {
     luogo: string | undefined;
     notti: number | undefined;
@@ -8,13 +9,14 @@ export class Itinerario {
     nome: string | undefined;
     posizioneLat: number = 0.0;
     posizioneLong: number = 0.0;
-    data:any | undefined;
+    data: any | undefined;
     programma: string | undefined;
     step: number | number = 0;
     alloggio: Alloggio[] = [];
     attivita: Attivita[] = [];
     trasporti: Trasporti[] = [];
     gmap: any;
+    diario: Diario | any;
 }
 
 // info su come stampare HMTL con src da ts e le mappe 

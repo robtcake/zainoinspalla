@@ -21,7 +21,9 @@
                 <div class="stats-icon stats-icon-lg"><i class="fa fa-file-alt fa-fw"></i></div>
                 <div class="stats-content">
                     <div class="stats-title">{{note.titolo}}</div>
-                    <div ><em><h4>{{note.paragrafo}}</h4></em></div>
+                    <div><em>
+                            <h4>{{note.paragrafo}}</h4>
+                        </em></div>
                     <div class="stats-desc">
                         <a class="w-60px" *ngIf="note.link" href="{{note.link}}" target="_blank"
                             style="color: white !important">
@@ -104,10 +106,21 @@
                         <h5>{{it.nome}} </h5>
                         <hr class="my-10px" />
                         <h3>{{it.data?.toDate() | date:'dd MMM yyy'}}</h3>
-                        <hr *ngIf="it.notti" class="my-10px" />
-                        <h5 *ngIf="it.notti">Notti: {{it.notti}} </h5>
-                        <hr class="my-10px" *ngIf="it.luogo" /> {{it.luogo}}
+                        <span *ngIf="it.notti">
+                             <h5 *ngIf="it.notti"> {{it.luogo}}  Notti: {{it.notti}} </h5>
+                        </span>
+                       
                         <div *ngIf="it.gmap" [innerHtml]="it.gmap"></div>
+                        <hr class="my-10px" *ngIf="it.diario" />
+                        <a *ngIf="it.diario" data-bs-toggle="offcanvas" href="#offcanvasExample"
+                            (click)="toggleDiary(it)" class="btn btn-yellow btn-lg">
+                            <span class="d-flex align-items-center text-left">
+                                <i class="fa fa-book">&nbsp;&nbsp;</i>
+                                <span>
+                                    Diario
+                                </span>
+                            </span>
+                        </a>
                     </div>
                     <!-- END timeline-time -->
                     <!-- BEGIN timeline-icon -->
@@ -119,11 +132,11 @@
                     <div class="timeline-content">
                         <!-- BEGIN timeline-header -->
                         <div class="timeline-header">
-                          <p class="lead">{{it.programma}}</p>  
+                            <p class="lead">{{it.programma}}</p>
                         </div>
                         <!-- END timeline-header -->
                         <!-- BEGIN timeline-body -->
-                        <div class="timeline-body">
+                        <div class="timeline-body" >
                             <!-- ALLOGGIO -->
                             <div class="lead mb-3" *ngIf="it.alloggio.length > 0">
                                 <h4 class="card-title">Alloggi</h4>
@@ -177,8 +190,9 @@
                                                 date:'dd MMM yyy hh:mm'}}</dd>
                                             <dt class="col-md-4">prezzo/pax</dt>
                                             <dd class="col-md-8">{{trasporto.prezzoPersona}}</dd>
-                                            <dt class="col-md-4">note</dt>
-                                            <dd class="col-md-8">{{trasporto.note}}</dd>
+                                            <dt class="col-md-4" *ngIf="trasporto.note">note</dt>
+                                            <dd class="col-md-8" *ngIf="trasporto.note">{{trasporto.note}}</dd>
+                                            <hr class="bg-gray-500" />
                                         </dl>
                                     </div>
                                 </div>
@@ -207,31 +221,33 @@
                                                     <dd class="col-md-8">{{attivita.orari}}</dd>
                                                     <dt class="col-md-4">prezzo/pax</dt>
                                                     <dd class="col-md-8">{{attivita.prezzoPersona}}</dd>
-                                                    <dd class="col-md-4" >
+                                                    <dd class="col-md-4">
                                                         <a class="w-60px" href="{{attivita.link}}" target="_blank">
                                                             <img *ngIf="attivita.link?.includes('tripadvisor')"
                                                                 src="../assets/img/brand/brand-tripadvisor.png" alt=""
                                                                 class="mw-100 rounded" />
                                                             <img *ngIf="attivita.link?.includes('wikipedia')"
                                                                 src="../assets/img/brand/brand-wikipedia.png" alt=""
-                                                                class="mw-100 rounded" /> 
+                                                                class="mw-100 rounded" />
                                                             <img *ngIf="attivita.link?.includes('gmaps')"
                                                                 src="../assets/img/brand/brand-gmaps.png" alt=""
                                                                 class="mw-100 rounded" />
                                                         </a>
                                                     </dd>
-                                                    <dd class="col-md-8"><div *ngIf="attivita.gmap" [innerHtml]="attivita.gmap"></div></dd>
-                                                    
+                                                    <dd class="col-md-8">
+                                                        <div *ngIf="attivita.gmap" [innerHtml]="attivita.gmap"></div>
+                                                    </dd>
+
                                                 </dl>
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
 
-                                    <div  class="row gx-1">
+                                    <div class="row gx-1">
                                         <div class="col-12">
-                                          <p>
-                                               {{attivita.note}}
-                                          </p> 
+                                            <p>
+                                                {{attivita.note}}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -273,19 +289,18 @@
             <!-- END Note di viaggio -->
         </div>
         <div class="col-xl-3 ui-sortable">
-<style>
-
-    :host ::ng-deep .mapEmbed iframe { 
-        width:100%;
-        height:500px;
-        }
-</style>
+            <style>
+                :host ::ng-deep .mapEmbed iframe {
+                    width: 100%;
+                    height: 500px;
+                }
+            </style>
             <!-- BEGIN widget-map -->
             <div class="widget-map rounded mb-4" data-id="widget">
                 <!-- BEGIN widget-map-body -->
-                <div class="widget-map-body" 
-                *ngIf="viaggioRef?.percorsoMapsEmbed" [innerHtml]="viaggioRef?.percorsoMapsEmbed">
-                   
+                <div class="widget-map-body" *ngIf="viaggioRef?.percorsoMapsEmbed"
+                    [innerHtml]="viaggioRef?.percorsoMapsEmbed">
+
                     <!-- <iframe class="d-block"
                         src="https://www.google.com/maps/embed?pb=!1m70!1m12!1m3!1d12578254.533305304!2d71.63962526882331!3d23.751229074037955!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m55!3e0!4m5!1s0x390d047309fff32f%3A0xfc5606ed1b5d46c3!2sDelhi%2C%20India!3m2!1d28.6862738!2d77.2217831!4m5!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan%2C%20India!3m2!1d26.9124336!2d75.7872709!4m5!1s0x39740d857c2f41d9%3A0x784aef38a9523b42!2sAgra%2C%20Uttar%20Pradesh%2C%20India!3m2!1d27.1766701!2d78.00807449999999!4m5!1s0x3976c5d1792291fb%3A0xff4fb56d65bc3adf!2sGwalior%2C%20Madhya%20Pradesh%2C%20India!3m2!1d26.218287099999998!2d78.18283079999999!4m5!1s0x3977785bf0359717%3A0xeab7a0fa33593940!2zw5NyxI1oYSwgTWFkaHlhIFByYWRlc2gsIEluZGlh!3m2!1d25.3682704!2d78.6285252!4m5!1s0x3982e5f63138c3c5%3A0xaa20ea639a4572c!2sKhajuraho%2C%20Madhya%20Pradesh%2C%20India!3m2!1d24.8318452!2d79.91985489999999!4m5!1s0x398e2db76febcf4d%3A0x68131710853ff0b5!2sVaranasi%2C%20Uttar%20Pradesh%2C%20India!3m2!1d25.317645199999998!2d82.9739144!4m5!1s0x3bbfba106336b741%3A0xeaf887ff62f34092!2sGoa%2C%20India!3m2!1d15.2993265!2d74.12399599999999!4m5!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra%2C%20India!3m2!1d19.0759837!2d72.8776559!5e0!3m2!1sit!2sit!4v1629734397487!5m2!1sit!2sit"
                         width="100%" height="500px" frameborder="0" style="border:0" allowfullscreen=""></iframe>-->
@@ -294,23 +309,37 @@
             </div>
             <!-- END widget-map -->
             <!-- ASSICURAZIONI widget- -->
+            <div class="note note-purple">
+                <div class="note-content">
+                    <h2> <i class="fa fa-toilet-paper"></i> &nbsp;&nbsp; <b>Cosa portare</b></h2>
+                    <hr class="my-10px bg-white " />
+                    <ul *ngFor="let cose of viaggioRef?.cosaPortare">
+                        <li class="text-gray-200">
+                            {{cose}}
+                        </li>
+                    </ul>
+                    <hr class="my-10px bg-white " />
+                </div>
+            </div>
+            <!-- END Assicurazioni -->
+            <!-- COSA PORTARE widget- -->
             <div class="note note-info">
                 <div class="note-content">
                     <h2> <i class="fa fa-shield-alt"></i> &nbsp;&nbsp; <b>Assicurazioni</b></h2>
-                    <hr class="my-10px" bg-white />
+                    <hr class="my-10px bg-white" />
                     <div *ngFor="let assicurazione of listaAssicurazioni">
                         <a class="w-60px" href="{{assicurazione.link}}" target="_blank"
                             style="color: white !important;">
                             <h5>{{assicurazione.nome}}</h5>
                         </a>
-                        <p> {{assicurazione.descrizione}} </p>
-                        <p> prezzo/pax: {{assicurazione.prezzoPersona}} </p>
-                        <hr class="my-10px" bg-white />
+                        <p class="text-gray-200"> {{assicurazione.descrizione}} </p>
+                        <p class="text-gray-200"> prezzo/pax: {{assicurazione.prezzoPersona}} </p>
+                        <hr class="my-10px bg-white" />
                     </div>
                 </div>
             </div>
-            <!-- END Assicurazioni -->
-            <!-- BEGIN card -->
+            <!-- END Cosa portare -->
+            <!-- BEGIN STIMA DEI COSTI -->
             <div class="card border-0 mb-3 bg-gray-900 text-white">
                 <!-- BEGIN card-body -->
                 <div class="card-body">
@@ -327,7 +356,7 @@
                             <i class="fas fa-car-side fa-fw" *ngIf="costi.tipo=='auto'"></i>
                             <i class="fas fa-home fa-fw" *ngIf="costi.tipo=='albergo' || costi.tipo=='ostello'"></i>
                             <i class="fas fa-ticket-alt fa-fw" *ngIf="costi.tipo=='attivita'"></i>
-                            <i  class="fas fa-utensils fa-fw" *ngIf="costi.tipo=='ristorante'"></i>
+                            <i class="fas fa-utensils fa-fw" *ngIf="costi.tipo=='ristorante'"></i>
                         </div>
                         <div class="text-truncate">
                             <div>{{costi.nome}}</div>
@@ -336,8 +365,11 @@
                         <div class="ms-auto text-center">
                             <div class="fs-13px"></div>
                             <div class="text-gray-500 fs-10px">
-                                <i class="fas fa-child fa-fw" *ngIf="costi.tipo=='aereo' || costi.tipo=='auto' || costi.tipo=='attivita' || costi.tipo=='ristorante'" title="Numero persone"></i>
-                                <i class="fas fa-bed fa-fw" *ngIf="costi.tipo=='albergo' || costi.tipo=='ostello'" title="Numero camere"></i>
+                                <i class="fas fa-child fa-fw"
+                                    *ngIf="costi.tipo=='aereo' || costi.tipo=='auto' || costi.tipo=='attivita' || costi.tipo=='ristorante'"
+                                    title="Numero persone"></i>
+                                <i class="fas fa-bed fa-fw" *ngIf="costi.tipo=='albergo' || costi.tipo=='ostello'"
+                                    title="Numero camere"></i>
                                 {{costi.numero}}
                             </div>
                         </div>
@@ -348,11 +380,34 @@
                 </div>
                 <!-- END card-body -->
             </div>
-            <!-- END card -->
+            <!-- END stima dei costi -->
 
         </div>
     </div>
 
+    <!-- DIARIO -->
 
+    <div style="height: 400px; margin-top: 400px; background: url(../assets/img/bg/bg-diary.jpg) center 0px / cover no-repeat ; "
+        class="offcanvas offcanvas-start" id="offcanvasExample" data-bs-backdrop="false" data-bs-scroll="true">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasLabel">{{diarioData?.toDate() | date:'dd MMM yyy'}} {{diarioAutore}}</h5>
+            <button type="button" class="btn btn-danger btn-icon btn-circle btn-sm" data-bs-dismiss="offcanvas"><i
+                    class="fa fa-times"></i></button>
+        </div>
+
+        <div class="offcanvas-body">
+            {{diarioRacconto}}
+        </div>
+    </div>
+
+    <!-- placement end -->
+    <div class="offcanvas offcanvas-end">
+        ...
+    </div>
+
+    <!-- placement bottom -->
+    <div class="offcanvas offcanvas-bottom">
+        ...
+    </div>
 
 </div>

@@ -14,6 +14,7 @@ export class Viaggio {
     bandiere:string[]=[];
     percorsoMapsEmbed: any;
     pubblicato: boolean = true;
+    cosaPortare: string[]=[];
 }
 
 export class ViaggiareSicuriFarnesina  {
