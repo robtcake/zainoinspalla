@@ -30,13 +30,13 @@
 								<a routerLink="/dettaglio-viaggio/{{vgg.id}}">{{vgg.vi?.titolo}}</a>
 							</h4>
 							<div class="post-by">
-								di <a href="#">Robt</a> <span class="divider">|</span> <span >{{vgg.vi?.dataInizio.toDate() | date:'MMM yyy'}} - {{vgg.vi?.dataFine.toDate() | date:'MMM yyy'}}</span>
+								di <a href="#">Robt</a> <span class="divider">|</span> <span >{{vgg.vi?.dataInizio.toDate() | date:'dd MMM yyy'}} - {{vgg.vi?.dataFine.toDate() | date:'dd MMM yyy'}}</span>
 							</div>
 							<div class="post-desc">
 								{{vgg.vi?.descrizione}}
 							</div>
 							<div class="read-btn-container">
-								<a routerLink="/dettaglio-viaggio/{{vgg.id}}">Approfondosci <i class="fa fa-angle-double-right"></i></a>
+								<a routerLink="/dettaglio-viaggio/{{vgg.id}}">Approfondisci <i class="fa fa-angle-double-right"></i></a>
 							</div>
 						</div>
 						<!-- end post-info -->

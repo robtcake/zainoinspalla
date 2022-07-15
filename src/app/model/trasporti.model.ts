@@ -12,4 +12,5 @@ export class Trasporti {
     arrivo: string | undefined;
     partenza: string | undefined;
     compagnia: string | undefined;
+    brandScr: string = "";
 }

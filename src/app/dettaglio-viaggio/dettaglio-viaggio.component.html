@@ -52,8 +52,7 @@
                     <div class="stats-title"><i class="fas fa-bus fa-fw"></i> Trasporti</div>
                     <div class="semi-bold">{{viaggioRef?.trasporti}}</div>
                 </div>
-            </div>
-            <div class="col-xl-2 ui-sortable">
+                <br/>
                 <div class="stats-content ">
                     <div class="stats-title"> <i class="fas fa-coffee fa-fw"></i> Pasti</div>
                     <div class="semi-bold">{{viaggioRef?.pasti}}</div>
@@ -86,17 +85,30 @@
                         </a>
                     </div>
                 </div>
+                <div class="stats-content ">
+                    <div class="stats-title"><i class="fas fa-money-bill-wave"></i> Valuta</div>
+                    <div class="semi-bold">{{viaggioRef?.valuta}}</div>
+                </div>
+                
+            </div>
+            <div class="col-xl-2 ui-sortable">
+                <div class="stats-content ">
+                    <div class="semi-bold">
+                        <div class="stats-title"> <i class="fas fa-download fa-fw"></i> Programma </div>
+                        <a href="{{viaggioRef?.programmaFile}}" target="_blank" style="color: white !important;">
+                            <i class="fas fa-file-pdf fa-2x float-start me-3 fa-border" ></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-
-
 
     </div>
     <!-- end widget-stats -->
 
     <!-- END page-header -->
     <div class="row mb-3">
-        <div class="col-xl-9 ui-sortable">
+        <div class="col-xl-8 ui-sortable">
             <!-- BEGIN timeline -->
             <div class="timeline">
                 <!-- BEGIN timeline-item -->
@@ -107,10 +119,10 @@
                         <hr class="my-10px" />
                         <h3>{{it.data?.toDate() | date:'dd MMM yyy'}}</h3>
                         <span *ngIf="it.notti">
-                             <h5 *ngIf="it.notti"> {{it.luogo}}  Notti: {{it.notti}} </h5>
+                            <h5 *ngIf="it.notti"> {{it.luogo}} Notti: {{it.notti}} </h5>
                         </span>
-                       
-                        <div *ngIf="it.gmap" [innerHtml]="it.gmap"></div>
+
+                        <!--<div *ngIf="it.gmap" [innerHtml]="it.gmap"></div>-->
                         <hr class="my-10px" *ngIf="it.diario" />
                         <a *ngIf="it.diario" data-bs-toggle="offcanvas" href="#offcanvasExample"
                             (click)="toggleDiary(it)" class="btn btn-yellow btn-lg">
@@ -136,33 +148,44 @@
                         </div>
                         <!-- END timeline-header -->
                         <!-- BEGIN timeline-body -->
-                        <div class="timeline-body" >
+                        <div class="timeline-body">
                             <!-- ALLOGGIO -->
                             <div class="lead mb-3" *ngIf="it.alloggio.length > 0">
                                 <h4 class="card-title">Alloggi</h4>
                                 <!-- begin widget-list -->
                                 <div class="d-flex" *ngFor="let alloggio of it.alloggio">
-                                    <a class="w-60px" href="{{alloggio.link}}" target="_blank">
-                                        <i *ngIf="!alloggio.link?.includes('booking.com')"
-                                            class="fas fa-home fa-fw"></i>
-                                        <img *ngIf="alloggio.link?.includes('booking.com')"
-                                            src="../assets/img/brand/brand-booking-com.png" alt=""
-                                            class="mw-100 rounded" />
-                                    </a>
-                                    <div class="ps-3 flex-1">
-                                        <h5 class="mb-1">{{alloggio.nome}}</h5>
+                                    <div class="ps-3 flex-1 row">
                                         <hr class="bg-gray-500" />
+                                        <div class="col-md-9">
+                                            <h5 class="mb-1">
+                                                <div *ngIf="alloggio.link;else no_link_alloggio"
+                                                    style="display: inline;">
+                                                    <a class="w-60px" href="{{alloggio.link}}" target="_blank">
+                                                        <img src="../assets/img/brand/{{alloggio.brandScr}}" alt=""
+                                                            class="mw-10 rounded"
+                                                            style="max-width: 50px; display: inline;" />
+                                                        <span
+                                                            style="display: inline; padding-left: 10px;">{{alloggio.nome}}</span>
+                                                    </a>
+                                                </div>
+                                                <ng-template #no_link_alloggio style="display: inline;">
+                                                    <i class="fas fa-home fa-fw" style="display: inline;"></i>
+                                                    <span style="display: inline; padding-left: 10px;">{{alloggio.nome}}</span>
+                                                </ng-template>
+                                            </h5>
+                                        </div>
+                                        <div class="col-md-3" style="text-align: right">
+                                            <i class="fas fa-euro-sign"></i> {{alloggio.prezzoCamera}}
+                                            <i class="fas fa-child"></i> {{alloggio.numeroPersone}}
+                                        </div>
+
                                         <dl class="row">
-                                            <dt class="col-md-4">tipo camera</dt>
-                                            <dd class="col-md-8">{{alloggio.tipoCamere}}</dd>
-                                            <dt class="col-md-4">numero camere</dt>
-                                            <dd class="col-md-8">{{alloggio.numeroCamere}}</dd>
-                                            <dt class="col-md-4">prezzo/camera</dt>
-                                            <dd class="col-md-8">{{alloggio.prezzoCamera}}</dd>
-                                            <dt class="col-md-4">persone/camera</dt>
-                                            <dd class="col-md-8">{{alloggio.numeroPersone}}</dd>
-                                            <dt class="col-md-4">note</dt>
-                                            <dd class="col-md-8">{{alloggio.note}}</dd>
+                                            <dt class="col-md-3">tipo camera</dt>
+                                            <dd class="col-md-9">{{alloggio.tipoCamere}}</dd>
+                                            <dt class="col-md-3">num. camere</dt>
+                                            <dd class="col-md-9">{{alloggio.numeroCamere}}</dd>
+                                            <dt class="col-md-3">note</dt>
+                                            <dd class="col-md-9">{{alloggio.note}}</dd>
                                         </dl>
                                     </div>
                                 </div>
@@ -173,90 +196,110 @@
                                 <h4 class="card-title">Trasporti</h4>
                                 <!-- begin widget-list -->
                                 <div class="d-flex" *ngFor="let trasporto of it.trasporti">
-                                    <div *ngIf="trasporto.link">
-                                        <a class="w-60px" href="{{trasporto.link}}" target="_blank">
-                                            <i class="{{trasporto.icona}}"></i>
-                                        </a>
-                                    </div>
-                                    <div class="ps-3 flex-1">
-                                        <h5 class="mb-1">{{trasporto.compagnia}}</h5>
+                                    <div class="ps-3 flex-1 row">
                                         <hr class="bg-gray-500" />
+                                        <div class="col-md-9">
+                                            <h5 class="mb-1">
+                                                <div *ngIf="trasporto.brandScr;else no_brand_trasporto">
+                                                    <a class="w-60px" href="{{trasporto.link}}" target="_blank">
+                                                        <img src="../assets/img/brand/{{trasporto.brandScr}}" alt=""
+                                                            class="mw-10 rounded"
+                                                            style="max-width: 50px; display: inline;" />
+                                                        <span style="display: inline; padding-left: 10px;">{{trasporto.compagnia}}</span>
+                                                    </a>
+                                                </div>
+                                                <ng-template #no_brand_trasporto>
+                                                    <a class="w-60px" href="{{trasporto.link}}" target="_blank">
+                                                        <i class="{{trasporto.icona}}" style="display: inline;"></i>
+                                                        <span style="display: inline; padding-left: 10px;">{{trasporto.compagnia}}</span>
+                                                    </a>
+                                                </ng-template>
+                                            </h5>
+                                        </div>
+                                        <div class="col-md-3" style="text-align: right">
+                                            <i class="fas fa-euro-sign"></i> {{trasporto.prezzoPersona}}
+                                            <i class="fas fa-child"></i> {{trasporto.numeroPersone}}
+                                        </div>
+
                                         <dl class="row">
-                                            <dt class="col-md-4">partenza</dt>
-                                            <dd class="col-md-8">{{trasporto.partenza}}
+                                            <dt class="col-md-3">partenza</dt>
+                                            <dd class="col-md-9">{{trasporto.partenza}}
                                                 {{trasporto.dataPartenza?.toDate() | date:'dd MMM yyy hh:mm'}}</dd>
-                                            <dt class="col-md-4">arrivo</dt>
-                                            <dd class="col-md-8">{{trasporto.arrivo}} {{trasporto.dataArrivo?.toDate() |
+                                            <dt class="col-md-3">arrivo</dt>
+                                            <dd class="col-md-9">{{trasporto.arrivo}} {{trasporto.dataArrivo?.toDate() |
                                                 date:'dd MMM yyy hh:mm'}}</dd>
-                                            <dt class="col-md-4">prezzo/pax</dt>
-                                            <dd class="col-md-8">{{trasporto.prezzoPersona}}</dd>
-                                            <dt class="col-md-4" *ngIf="trasporto.note">note</dt>
-                                            <dd class="col-md-8" *ngIf="trasporto.note">{{trasporto.note}}</dd>
-                                            <hr class="bg-gray-500" />
+                                            <dt class="col-md-3" *ngIf="trasporto.note">note</dt>
+                                            <dd class="col-md-9" *ngIf="trasporto.note">{{trasporto.note}}</dd>      
                                         </dl>
                                     </div>
                                 </div>
                                 <hr class="my-10px" />
                             </div>
-
                             <!-- ATTIVITA -->
                             <!-- timeline-post -->
-                            <div class="mb-3" *ngIf="it.attivita.length > 0">
+                            <div class="lead mb-3" *ngIf="it.attivita.length > 0">
                                 <h4 class="card-title">Attività</h4>
-                                <div class="row gx-1" *ngFor="let attivita of it.attivita">
-                                    <div class="row gx-1">
-                                        <div class="col-6">
-                                            <div class="ratio ratio-4x3">
-                                                <img src="{{attivita.immagine}}" class="d-block mw-100">
-                                            </div>
+                                <!-- begin widget-list -->
+                                <div class="d-flex" *ngFor="let attivita of it.attivita">
+                                    <div class="ps-3 flex-1 row">
+                                    <!--    <div class="col-6" *ngIf="attivita.gmap">
+                                                <div [innerHtml]="attivita.gmap"></div>
+                                        </div> -->
+                                        <hr class="bg-gray-500" />
+                                        <div class="col-md-9">
+                                            <h5 class="mb-1">
+                                                <div *ngIf="attivita.brandScr;else no_link_attivita">
+                                                    <a class="w-60px" href="{{attivita.link}}" target="_blank">
+                                                        <img src="../assets/img/brand/{{attivita.brandScr}}" alt=""
+                                                            class="mw-10 rounded"
+                                                            style="max-width: 50px; display: inline;" />
+                                                        <span style="display: inline; padding-left: 10px;">{{attivita.nome}}</span>
+                                                    </a>
+                                                </div>
+                                                <ng-template #no_link_attivita>
+                                                    <a class="w-60px" href="{{attivita.link}}" target="_blank">
+                                                        <i class="{{attivita.icona}}" style="display: inline;"></i>
+                                                        <span style="display: inline; padding-left: 10px;">{{attivita.nome}}</span>
+                                                    </a>
+                                                </ng-template>
+                                            </h5>
                                         </div>
-                                        <div class="col-6">
-                                            <div class="ps-3 flex-1">
-                                                <h5 class="mb-1">{{attivita.nome}}</h5>
-                                                <hr class="bg-gray-500" />
+                                        <div class="col-md-3" style="text-align: right" *ngIf="attivita.maps">
+                                            
+                                            <a class="w-60px" href="{{attivita.maps}}" target="_blank">
+                                                <img src="../assets/img/brand/brand-gmaps.png" alt=""
+                                                class="mw-10 rounded"
+                                                style="max-width: 30px; max-height: 30px; display: inline;" />
+                                            </a>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6" >
                                                 <dl class="row">
-                                                    <dt class="col-md-4">tipo</dt>
-                                                    <dd class="col-md-8">{{attivita.tipo}}</dd>
-                                                    <dt class="col-md-4">orari</dt>
-                                                    <dd class="col-md-8">{{attivita.orari}}</dd>
-                                                    <dt class="col-md-4">prezzo/pax</dt>
-                                                    <dd class="col-md-8">{{attivita.prezzoPersona}}</dd>
-                                                    <dd class="col-md-4">
-                                                        <a class="w-60px" href="{{attivita.link}}" target="_blank">
-                                                            <img *ngIf="attivita.link?.includes('tripadvisor')"
-                                                                src="../assets/img/brand/brand-tripadvisor.png" alt=""
-                                                                class="mw-100 rounded" />
-                                                            <img *ngIf="attivita.link?.includes('wikipedia')"
-                                                                src="../assets/img/brand/brand-wikipedia.png" alt=""
-                                                                class="mw-100 rounded" />
-                                                            <img *ngIf="attivita.link?.includes('gmaps')"
-                                                                src="../assets/img/brand/brand-gmaps.png" alt=""
-                                                                class="mw-100 rounded" />
-                                                        </a>
-                                                    </dd>
-                                                    <dd class="col-md-8">
-                                                        <div *ngIf="attivita.gmap" [innerHtml]="attivita.gmap"></div>
-                                                    </dd>
-
+                                                    <dt class="col-md-3">tipo</dt>
+                                                    <dd class="col-md-9">{{attivita.tipo}}</dd>
+                                                    <dt class="col-md-3">orari</dt>
+                                                    <dd class="col-md-9">{{attivita.orari}}</dd>
+                                                    <dt class="col-md-3">prezzo</dt>
+                                                    <dd class="col-md-9">{{attivita.prezzoPersona}}</dd>
+                                                </dl>
+                                            </div>
+                                            <div class="col-6" >
+                                                <dl class="row">
+                                                    <dt class="col-md-3">note</dt>
+                                                    <dd class="col-md-9">{{attivita.note}}</dd>
                                                 </dl>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="row gx-1">
-                                        <div class="col-12">
-                                            <p>
-                                                {{attivita.note}}
-                                            </p>
-                                        </div>
+                                    <div class="row" *ngIf="attivita.immagine">  
+                                        <img src="{{attivita.immagine}}" class="d-block mw-100">
                                     </div>
                                 </div>
-                                <div class="mb-2" *ngIf="it.note">
-                                    <hr class="my-10px" />
-                                    <h4 class="card-title">Note</h4> {{it.note}}
-                                </div>
+                                <hr class="my-10px" />
                             </div>
-
+                            <div class="mb-2" *ngIf="it.note">     
+                                <h4 class="card-title">Info</h4> {{it.note}}
+                            </div>
                         </div>
                         <!-- END timeline-body -->
                     </div>
@@ -288,14 +331,14 @@
             </div>
             <!-- END Note di viaggio -->
         </div>
-        <div class="col-xl-3 ui-sortable">
+        <div class="col-xl-4 ui-sortable">
             <style>
                 :host ::ng-deep .mapEmbed iframe {
                     width: 100%;
                     height: 500px;
                 }
             </style>
-            <!-- BEGIN widget-map -->
+            <!-- BEGIN widget-MAP -->
             <div class="widget-map rounded mb-4" data-id="widget">
                 <!-- BEGIN widget-map-body -->
                 <div class="widget-map-body" *ngIf="viaggioRef?.percorsoMapsEmbed"
@@ -308,7 +351,7 @@
                 <!-- END widget-map-body -->
             </div>
             <!-- END widget-map -->
-            <!-- ASSICURAZIONI widget- -->
+            <!-- COSA PORTARE widget- -->
             <div class="note note-purple">
                 <div class="note-content">
                     <h2> <i class="fa fa-toilet-paper"></i> &nbsp;&nbsp; <b>Cosa portare</b></h2>
@@ -321,8 +364,8 @@
                     <hr class="my-10px bg-white " />
                 </div>
             </div>
-            <!-- END Assicurazioni -->
-            <!-- COSA PORTARE widget- -->
+            <!-- END Cosa portare  -->
+            <!-- ASSICURAZIONI widget- -->
             <div class="note note-info">
                 <div class="note-content">
                     <h2> <i class="fa fa-shield-alt"></i> &nbsp;&nbsp; <b>Assicurazioni</b></h2>
@@ -333,12 +376,15 @@
                             <h5>{{assicurazione.nome}}</h5>
                         </a>
                         <p class="text-gray-200"> {{assicurazione.descrizione}} </p>
-                        <p class="text-gray-200"> prezzo/pax: {{assicurazione.prezzoPersona}} </p>
+                        <p class="text-gray-200"> 
+                            <i class="fas fa-euro-sign"></i> {{assicurazione.prezzoPersona}}
+                            <i class="fas fa-child"></i> {{assicurazione.numeroPersone}}
+                        </p>
                         <hr class="my-10px bg-white" />
                     </div>
                 </div>
             </div>
-            <!-- END Cosa portare -->
+            <!-- END Assicurazioni -->
             <!-- BEGIN STIMA DEI COSTI -->
             <div class="card border-0 mb-3 bg-gray-900 text-white">
                 <!-- BEGIN card-body -->
@@ -354,7 +400,8 @@
                         <div class="widget-img rounded-3 me-10px  p-3px w-30px">
                             <i class="fas fa-plane fa-fw" *ngIf="costi.tipo=='aereo'"></i>
                             <i class="fas fa-car-side fa-fw" *ngIf="costi.tipo=='auto'"></i>
-                            <i class="fas fa-home fa-fw" *ngIf="costi.tipo=='albergo' || costi.tipo=='ostello'"></i>
+                            <i class="fas fa-home fa-fw" *ngIf="costi.tipo?.includes('albergo') || costi.tipo=='ostello'|| costi.tipo=='riad' || costi.tipo?.includes('house')"></i>
+                            <i class="fas fa-campground" *ngIf="costi.tipo?.includes('tendato')"></i>
                             <i class="fas fa-ticket-alt fa-fw" *ngIf="costi.tipo=='attivita'"></i>
                             <i class="fas fa-utensils fa-fw" *ngIf="costi.tipo=='ristorante'"></i>
                         </div>
@@ -368,7 +415,7 @@
                                 <i class="fas fa-child fa-fw"
                                     *ngIf="costi.tipo=='aereo' || costi.tipo=='auto' || costi.tipo=='attivita' || costi.tipo=='ristorante'"
                                     title="Numero persone"></i>
-                                <i class="fas fa-bed fa-fw" *ngIf="costi.tipo=='albergo' || costi.tipo=='ostello'"
+                                <i class="fas fa-bed fa-fw" *ngIf="costi.tipo?.includes('albergo') || costi.tipo=='ostello'|| costi.tipo=='riad' || costi.tipo?.includes('house') || costi.tipo?.includes('tendato')"
                                     title="Numero camere"></i>
                                 {{costi.numero}}
                             </div>
@@ -390,7 +437,8 @@
     <div style="height: 400px; margin-top: 400px; background: url(../assets/img/bg/bg-diary.jpg) center 0px / cover no-repeat ; "
         class="offcanvas offcanvas-start" id="offcanvasExample" data-bs-backdrop="false" data-bs-scroll="true">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasLabel">{{diarioData?.toDate() | date:'dd MMM yyy'}} {{diarioAutore}}</h5>
+            <h5 class="offcanvas-title" id="offcanvasLabel">{{diarioData?.toDate() | date:'dd MMM yyy'}}
+                {{diarioAutore}}</h5>
             <button type="button" class="btn btn-danger btn-icon btn-circle btn-sm" data-bs-dismiss="offcanvas"><i
                     class="fa fa-times"></i></button>
         </div>

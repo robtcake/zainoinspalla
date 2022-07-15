@@ -8,7 +8,7 @@ import { ViaggiService } from './../service/viaggi.service';
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { ViaggiareSicuriFarnesina, Viaggio } from '../model/viaggio.model';
 import { ActivatedRoute } from '@angular/router';
-import { DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { StimaCosti } from '../model/stimaCosti.model';
 
 
@@ -26,11 +26,11 @@ export class DettaglioViaggioComponent implements OnInit {
   listaNote: NoteViaggio[] = [];
   listaItinerari: Itinerario[] = [];
   listaCosti: StimaCosti[] = [];
-  totaleCosti : number = 0;
+  totaleCosti: number = 0;
   listaVS: ViaggiareSicuriFarnesina[] = [];
-  diarioData: any| undefined;
-  diarioAutore : string = "";
-  diarioRacconto : string = "";
+  diarioData: any | undefined;
+  diarioAutore: string = "";
+  diarioRacconto: string = "";
 
 
 
@@ -38,15 +38,15 @@ export class DettaglioViaggioComponent implements OnInit {
   constructor(private viaggiService: ViaggiService, private act: ActivatedRoute, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
-    
+
     const id = this.act.snapshot.paramMap.get('id') || ""; // perchè può tornare null, cosa che non deve fare
-    
+
 
     // recupero i dati del viaggio
     this.viaggiService.getViaggioVChanges(id).subscribe(res => {
-      this.viaggioRef = res as Viaggio; 
-      if(this.viaggioRef.percorsoMapsEmbed){
-        let percorsoMaps = '<div class="mapEmbed" > '+this.viaggioRef.percorsoMapsEmbed+' </div>'; //https://stackoverflow.com/questions/57572943/force-innerhtml-content-to-fit-inside-div-width
+      this.viaggioRef = res as Viaggio;
+      if (this.viaggioRef.percorsoMapsEmbed) {
+        let percorsoMaps = '<div class="mapEmbed" > ' + this.viaggioRef.percorsoMapsEmbed + ' </div>'; //https://stackoverflow.com/questions/57572943/force-innerhtml-content-to-fit-inside-div-width
         this.viaggioRef.percorsoMapsEmbed = this.sanitizer.bypassSecurityTrustHtml(percorsoMaps);
       }
 
@@ -54,7 +54,7 @@ export class DettaglioViaggioComponent implements OnInit {
       let index = 0; //nel caso di più stati: assumo che salvo tante bandiere quanti link viaggiare sicuri, nello stesso ordine.
       this.viaggioRef.viaggiareSicuri.forEach(element => {
         let vs: ViaggiareSicuriFarnesina = {
-          bandiera : "",
+          bandiera: "",
           link: ""
         };
         vs.link = this.sanitizer.bypassSecurityTrustUrl(element); // https://angular.io/guide/security#xss - Trusting safe values
@@ -71,7 +71,7 @@ export class DettaglioViaggioComponent implements OnInit {
     //   this.viaggioRef = res.payload.data() as Viaggio;
     //   res.payload.id;
     // })
-  
+
 
     // NOTE
     this.viaggiService.getNoteSnap(id).subscribe(res => {
@@ -92,82 +92,114 @@ export class DettaglioViaggioComponent implements OnInit {
     });
 
     // ITINERARIO
-    this.viaggiService.getItinerarioSnap(id).subscribe(res =>{
+    this.viaggiService.getItinerarioSnap(id).subscribe(res => {
       this.listaItinerari = [];
       this.totaleCosti = 0;
-        res.forEach(element => {
+      res.forEach(element => {
 
-          var it = element.payload.doc.data() as Itinerario;
-          if(element.payload.doc.data().posizione){
-            it.posizioneLat = element.payload.doc.data().posizione.latitude;
-            it.posizioneLong = element.payload.doc.data().posizione.longitude;
-            var linkGmap = '<iframe  src="https://maps.google.com/maps?q='+it.posizioneLat+','+it.posizioneLong+'&hl=it&z=3&amp;output=embed" width="100%" height="200px" frameborder="0" style="border:0" allowfullscreen="" > </iframe>'
-            it.gmap = this.sanitizer.bypassSecurityTrustHtml(linkGmap); // per info guardare itinerario.model.ts
-          }
-          it.alloggio = [];
-          this.viaggiService.getAlloggiSnap(id, element.payload.doc.id).subscribe(resA =>{
-            resA.forEach(elementA => {
-              var sca : StimaCosti = new StimaCosti;
-              var all = elementA.payload.doc.data() as Alloggio;
-              sca.nome = all.nome;
-              sca.numero = all.numeroCamere;
-              sca.tipo = all.tipo;
-              sca.euro = all.totaleEuro;
-              this.listaCosti.push(sca);
-              it.alloggio.push(all);
-              //console.log(JSON.stringify(it));
-              this.totaleCosti += ((sca.euro * sca.numero) / all.numeroPersone);
-            })
-          })
-          
-          it.trasporti = [];
-          this.viaggiService.getTrasportiSnap(id, element.payload.doc.id).subscribe(resT =>{
-            resT.forEach(elementT => {
-              var sca : StimaCosti = new StimaCosti;
-              var trs = elementT.payload.doc.data() as Trasporti;
-              sca.nome = trs.compagnia;
-              sca.numero = trs.numeroPersone;
-              sca.tipo = trs.tipo;
-              sca.euro = trs.totaleEuro;
-              this.listaCosti.push(sca);
-              it.trasporti.push(trs);
-              this.totaleCosti += sca.euro * sca.numero;
-            })
-          })
-          it.attivita = [];
-          this.viaggiService.getAttivitaSnap(id, element.payload.doc.id).subscribe(resV =>{
-            resV.forEach(elementV => {
-              var att = elementV.payload.doc.data() as Attivita;
-              if(elementV.payload.doc.data().posizione){
-                att.posizioneLat = elementV.payload.doc.data().posizione.latitude;
-                att.posizioneLong = elementV.payload.doc.data().posizione.longitude;
-                var linkGmap = '<iframe  src="https://maps.google.com/maps?q='+att.posizioneLat+','+att.posizioneLong+'&hl=it&z=10&amp;output=embed" width="100%" height="200px" frameborder="0" style="border:0" allowfullscreen="" > </iframe>'
-                att.gmap = this.sanitizer.bypassSecurityTrustHtml(linkGmap); // per info guardare itinerario.model.ts
-                att.gmap = ""; // per ora lo oscuro perchè così ho la posizione ma non il luogo
+        var it = element.payload.doc.data() as Itinerario;
+        if (element.payload.doc.data().posizione) {
+          it.posizioneLat = element.payload.doc.data().posizione.latitude;
+          it.posizioneLong = element.payload.doc.data().posizione.longitude;
+          var linkGmap = '<iframe  src="https://maps.google.com/maps?q=' + it.posizioneLat + ',' + it.posizioneLong + '&hl=it&z=3&amp;output=embed" width="100%" height="200px" frameborder="0" style="border:0" allowfullscreen="" > </iframe>'
+          it.gmap = this.sanitizer.bypassSecurityTrustHtml(linkGmap); // per info guardare itinerario.model.ts
+        }
+        it.alloggio = [];
+        this.viaggiService.getAlloggiSnap(id, element.payload.doc.id).subscribe(resA => {
+          resA.forEach(elementA => {
+            var sca: StimaCosti = new StimaCosti;
+            var all = elementA.payload.doc.data() as Alloggio;
+            if (all.link) {
+              if (all.link.includes('booking.com')) {
+                all.brandScr = "brand-bookingcom.svg";
               }
-              var sca : StimaCosti = new StimaCosti;
+            }
+
+            sca.nome = all.nome;
+            sca.numero = all.numeroCamere;
+            sca.tipo = all.tipo;
+            sca.euro = all.totaleEuro;
+            this.listaCosti.push(sca);
+            it.alloggio.push(all);
+            //console.log(JSON.stringify(it));
+            this.totaleCosti += sca.euro;//((sca.euro * sca.numero) / all.numeroPersone);
+          })
+        })
+
+        it.trasporti = [];
+        this.viaggiService.getTrasportiSnap(id, element.payload.doc.id).subscribe(resT => {
+          resT.forEach(elementT => {
+            var sca: StimaCosti = new StimaCosti;
+            var trs = elementT.payload.doc.data() as Trasporti;
+            if (trs.link) {
+              if (trs.link.includes('ryanair.com')) {
+                trs.brandScr = "brand-ryanair.png";
+              }
+              if (trs.link.includes('rentalcars.com')) {
+                trs.brandScr = "brand-rentalcars.png";
+              }
+            }
+            sca.nome = trs.compagnia;
+            sca.numero = trs.numeroPersone;
+            sca.tipo = trs.tipo;
+            sca.euro = trs.totaleEuro;
+            this.listaCosti.push(sca);
+            it.trasporti.push(trs);
+            this.totaleCosti += sca.euro;// * sca.numero;
+          })
+        })
+        it.attivita = [];
+        this.viaggiService.getAttivitaSnap(id, element.payload.doc.id).subscribe(resV => {
+          resV.forEach(elementV => {
+            var att = elementV.payload.doc.data() as Attivita;
+            if (elementV.payload.doc.data().posizione) {
+              att.posizioneLat = elementV.payload.doc.data().posizione.latitude;
+              att.posizioneLong = elementV.payload.doc.data().posizione.longitude;
+              if (att.posizioneLat != 0 && att.posizioneLong != 0) {
+                var linkGmap = '<iframe  src="https://maps.google.com/maps?q=' + att.posizioneLat + ',' + att.posizioneLong + '&hl=it&z=18&amp;output=embed" width="100%" height="200px" frameborder="0" style="border:0" allowfullscreen="" > </iframe>'
+                att.gmap = this.sanitizer.bypassSecurityTrustHtml(linkGmap); // per info guardare itinerario.model.ts
+                //att.gmap = ""; // per ora lo oscuro perchè così ho la posizione ma non il luogo
+              } else {
+                att.gmap = "";
+              }
+
+            }
+            if (att.link) {
+              if (att.link.includes('tripadvisor')) {
+                att.brandScr = "brand-tripadvisor.png";
+              }
+              if (att.link.includes('wikipedia')) {
+                att.brandScr = "brand-wikipedia.png";
+              }
+              if (att.link.includes('maps')) {
+                att.brandScr = "brand-gmaps.png";
+              }
+            }
+            if (att.totaleEuro) {
+              var sca: StimaCosti = new StimaCosti;
               sca.nome = att.nome;
               sca.numero = att.numeroPartecipanti;
               sca.tipo = att.tipo == "ristorante" ? "ristorante" : "attivita"; // per le icone nei costi     
               sca.euro = att.totaleEuro;
               this.listaCosti.push(sca);
-              it.attivita.push(att);
-              this.totaleCosti += sca.euro * sca.numero;
-            })
+              this.totaleCosti += sca.euro;// * sca.numero;
+            }
+            it.attivita.push(att);
           })
-           this.listaItinerari.push(it);
         })
-       // this.listaItinerari.sort((a,b) => (a.step > b.step) ? 1 : ((b.step > a.step) ? -1 : 0)) // li ordino nel service in base alla data
+        this.listaItinerari.push(it);
+      })
+      // this.listaItinerari.sort((a,b) => (a.step > b.step) ? 1 : ((b.step > a.step) ? -1 : 0)) // li ordino nel service in base alla data
 
     });
-    
+
   }
 
-  toggleDiary(itinerario:Itinerario) {
+  toggleDiary(itinerario: Itinerario) {
     this.diarioData = this.diarioRacconto = this.diarioAutore = "";
     this.diarioData = itinerario.data;
     this.diarioAutore = itinerario.diario.autore;
-    this.diarioRacconto = itinerario.diario.racconto.join(' '); 
+    this.diarioRacconto = itinerario.diario.racconto.join(' ');
   }
 
 }

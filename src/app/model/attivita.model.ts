@@ -12,4 +12,7 @@ export class Attivita {
     gmap: any;
     immagine: string = "";
     orari: string = "";
+    brandScr: string = "";
+    maps: string | undefined;
+    icona: string | undefined;
 }

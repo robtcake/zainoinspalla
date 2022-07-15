@@ -11,4 +11,5 @@ export class Alloggio {
     tipo: string | undefined;
     note: string | undefined;
     totaleEuro: number = 0;
+    brandScr: string = "";
 }

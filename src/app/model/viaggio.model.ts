@@ -15,6 +15,8 @@ export class Viaggio {
     percorsoMapsEmbed: any;
     pubblicato: boolean = true;
     cosaPortare: string[]=[];
+    programmaFile: string | undefined;
+    valuta: string | undefined;
 }
 
 export class ViaggiareSicuriFarnesina  {
